@@ -1,0 +1,340 @@
+﻿@page "/employee-dashboard"
+
+@rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@using UserManagmentSystem.Models.ViewModel
+@using UserManagmentSystem.Models.Entities
+@using UserManagmentSystem.Service
+@using UserManagmentSystem.Data
+@using System.Security.Claims
+@inject IJSRuntime JSRuntime
+@inject EmployeeService EmployeeService
+@inject DepartmentService DepartmentService
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<h3>Employee Dashboard</h3>
+
+<button class="btn btn-primary" @onclick="() => OpenModal()">Add Employee</button>
+
+@if (employees == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <td>@employee.EmployeeId</td>
+                    <td>@($"{employee.FirstName} {employee.LastName}")</td>
+                    <td>@employee.Email</td>
+                    <td>@employee.Department.DepartmentName</td>
+                    <td>@(employee.IsActive ? "Active" : "Inactive")</td>
+                    <td>
+                        <button class="btn btn-sm btn-info" @onclick="() => OpenModal(employee)">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteEmployee(employee.EmployeeId)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (showModal)
+{
+    <div class="modal fade show" style="display:block; background-color: rgba(0,0,0,0.5);" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(editingEmployee.EmployeeId == 0 ? "Add" : "Edit") Employee</h5>
+                        <button type="button" class="btn-close" @onclick="CloseModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@editingEmployee" OnValidSubmit="SaveEmployee">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <InputText id="firstName" @bind-Value="editingEmployee.FirstName" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.FirstName)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <InputText id="lastName" @bind-Value="editingEmployee.LastName" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.LastName)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <InputText id="email" @bind-Value="editingEmployee.Email" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.Email)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userType">User Type</label>
+                            <InputSelect id="userType" @bind-Value="editingEmployee.UserType" class="form-control">
+                                @foreach (var userType in Enum.GetValues(typeof(UserType)))
+                                {
+                                    <option value="@userType">@userType</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => editingEmployee.UserType)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobileNumber">Mobile Number</label>
+                            <InputText id="mobileNumber" @bind-Value="editingEmployee.MobileNumber" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.MobileNumber)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="departmentId">Department</label>
+                            <InputSelect id="departmentId" @bind-Value="editingEmployee.DepartmentId" class="form-control">
+                                @foreach (var department in departments)
+                                {
+                                    <option value="@department.DepartmentId">@department.DepartmentName</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => editingEmployee.DepartmentId)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="roleId">Role</label>
+                            <InputSelect id="roleId" @bind-Value="editingEmployee.RoleId" class="form-control">
+                                <option value="">Select Role</option>
+                                @foreach (var role in roles)
+                                {
+                                    <option value="@role.RoleId">@role.RoleName</option>
+                                }
+                            </InputSelect>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <InputCheckbox @bind-Value="editingEmployee.IsActive" />
+                                Active
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="streetAddress">Street Address</label>
+                            <InputText id="streetAddress" @bind-Value="editingEmployee.StreetAddress" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.StreetAddress)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <InputText id="city" @bind-Value="editingEmployee.City" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.City)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <InputText id="state" @bind-Value="editingEmployee.State" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.State)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="postalCode">Postal Code</label>
+                            <InputText id="postalCode" @bind-Value="editingEmployee.PostalCode" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.PostalCode)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <InputText id="country" @bind-Value="editingEmployee.Country" class="form-control" />
+                            <ValidationMessage For="@(() => editingEmployee.Country)" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+    private List<Employee> employees;
+    private List<Department> departments;
+    private List<Role> roles;
+    private bool showModal = false;
+    private EmployeeViewModel editingEmployee = new EmployeeViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        await LoadEmployees();
+        await LoadDepartments();
+        await LoadRoles();
+    }
+
+    private async Task LoadEmployees()
+    {
+        // employees = await EmployeeService.GetEmployeesAsync();
+        // using var context = await DbFactory.CreateDbContextAsync();
+        // employees = await context.Employees.ToListAsync();
+        using var context = await DbFactory.CreateDbContextAsync();
+        employees = await context.Employees
+            .Include(e => e.Department)
+            .ToListAsync();
+    }
+
+    private async Task LoadDepartments()
+    {
+        departments = await DepartmentService.GetDepartmentsAsync();
+    }
+
+    private async Task LoadRoles()
+    {
+        // roles = await RoleService.GetRolesAsync();
+        // roles = await DbFactory.Roles.ToListAsync();
+        using var context = await DbFactory.CreateDbContextAsync();
+        roles = await context.Roles.ToListAsync();
+    }
+
+    private void OpenModal(Employee? employee = null)
+    {
+        if (employee == null)
+        {
+            editingEmployee = new EmployeeViewModel
+                {
+                    EmployeeId = 0
+                };
+        }
+        else
+        {
+            editingEmployee = new EmployeeViewModel
+                {
+                    EmployeeId = employee.EmployeeId,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Email = employee.Email,
+                    UserType = employee.UserType,
+                    MobileNumber = employee.MobileNumber,
+                    DepartmentId = employee.DepartmentId,
+                    RoleId = employee.RoleId,
+                    IsActive = employee.IsActive,
+                    StreetAddress = employee.StreetAddress,
+                    City = employee.City,
+                    State = employee.State,
+                    PostalCode = employee.PostalCode,
+                    Country = employee.Country
+                };
+        }
+        showModal = true;
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+        // editingEmployee = new EmployeeViewModel();
+    }
+
+    private async Task SaveEmployee()
+    {
+        Console.WriteLine("Inside saveEmployee");
+        // try
+        // {
+        //     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        //     var user = authState.User;
+        //     var adminId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        //     if (adminId == 0)
+        //     {
+        //         Console.WriteLine("User not authenticated or adminId is 0.");
+        //         Show a user-friendly error message
+        //         return;
+        //     }
+
+        //     Console.WriteLine($"Admin ID: {adminId}");
+        //     Console.WriteLine($"Editing Employee: {editingEmployee.FirstName} {editingEmployee.LastName}");
+
+        //     if (editingEmployee.EmployeeId == 0)
+        //     {
+        //         Console.WriteLine(" saveEmployee running create employee");
+        //         await EmployeeService.CreateEmployeeAsync(editingEmployee, adminId);
+        //         Console.WriteLine("Inside saveEmployee Success");
+        //     }
+        //     else
+        //     {
+        //         Console.WriteLine("Inside saveEmployee, .... running  update employee");
+        //         await EmployeeService.UpdateEmployeeAsync(editingEmployee.EmployeeId, editingEmployee, adminId);
+        //          Console.WriteLine("Inside saveEmployee Success");
+        //     }
+        //     Console.WriteLine("Inside saveEmployee Done no issue found");
+        //     await LoadEmployees();
+        //     CloseModal();
+
+        // }
+        // catch (Exception ex)
+        // {
+        //     Log the exception and show a user-friendly message
+        //     Console.Error.WriteLine(ex);
+        //     You might want to show a message to the user here
+        // }
+
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            var adminId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            if (adminId == 0)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "User not authenticated or adminId is 0.");
+                return;
+            }
+
+            if (editingEmployee.EmployeeId == 0)
+            {
+                await EmployeeService.CreateEmployeeAsync(editingEmployee, adminId);
+            }
+            else
+            {
+                await EmployeeService.UpdateEmployeeAsync(editingEmployee.EmployeeId, editingEmployee, adminId);
+            }
+
+            await LoadEmployees();
+            CloseModal();
+            StateHasChanged(); // Ensure UI updates
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error in SaveEmployee: {ex}");
+            await JSRuntime.InvokeVoidAsync("alert", $"An error occurred: {ex.Message}");
+        }
+   
+    
+    }
+
+    private async Task DeleteEmployee(int id)
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this employee?");
+        if (confirmed)
+        {
+            await EmployeeService.DeleteEmployeeAsync(id);
+            await LoadEmployees();
+        }
+    }
+}

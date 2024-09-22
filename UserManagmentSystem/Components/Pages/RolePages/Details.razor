@@ -1,0 +1,46 @@
+﻿@page "/roles/details"
+@using Microsoft.EntityFrameworkCore
+@using UserManagmentSystem.Models.Entities
+@inject IDbContextFactory<UserManagmentSystem.Data.AppDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Role</h2>
+    <hr />
+    @if (role is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">RoleName</dt>
+            <dd class="col-sm-10">@role.RoleName</dd>
+        </dl>
+        <div>
+            <a href="@($"/roles/edit?roleid={role.RoleId}")">Edit</a> |
+            <a href="@($"/roles")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Role? role;
+
+    [SupplyParameterFromQuery]
+    private int RoleId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        role = await context.Roles.FirstOrDefaultAsync(m => m.RoleId == RoleId);
+
+        if (role is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

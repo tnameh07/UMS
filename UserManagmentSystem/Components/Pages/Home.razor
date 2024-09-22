@@ -1,0 +1,20 @@
+﻿@page "/"
+
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+
+<TelerikContainer>
+
+    <TelerikDatePicker @bind-Value="@DatePickerValue" Width="200px" />
+
+</TelerikContainer>
+
+@code {
+    private DateTime DatePickerValue { get; set; } = DateTime.Today;
+}

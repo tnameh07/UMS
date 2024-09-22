@@ -1,0 +1,69 @@
+﻿@page "/departments/create"
+@using Microsoft.EntityFrameworkCore
+@using UserManagmentSystem.Models.Entities
+@inject IDbContextFactory<UserManagmentSystem.Data.AppDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Department</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Department" OnValidSubmit="AddDepartment" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="departmentname" class="form-label">DepartmentName:</label> 
+                <InputText id="departmentname" @bind-Value="Department.DepartmentName" class="form-control" /> 
+                <ValidationMessage For="() => Department.DepartmentName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="isactive" class="form-label">IsActive:</label> 
+                <InputCheckbox id="isactive" @bind-Value="Department.IsActive" class="form-check-input" /> 
+                <ValidationMessage For="() => Department.IsActive" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="createdat" class="form-label">CreatedAt:</label> 
+                <InputDate id="createdat" @bind-Value="Department.CreatedAt" class="form-control" /> 
+                <ValidationMessage For="() => Department.CreatedAt" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="createdbyadminid" class="form-label">CreatedByAdminId:</label> 
+                <InputNumber id="createdbyadminid" @bind-Value="Department.CreatedByAdminId" class="form-control" /> 
+                <ValidationMessage For="() => Department.CreatedByAdminId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="lastmodifiedbyadminid" class="form-label">LastModifiedByAdminId:</label> 
+                <InputNumber id="lastmodifiedbyadminid" @bind-Value="Department.LastModifiedByAdminId" class="form-control" /> 
+                <ValidationMessage For="() => Department.LastModifiedByAdminId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="updatedat" class="form-label">UpdatedAt:</label> 
+                <InputDate id="updatedat" @bind-Value="Department.UpdatedAt" class="form-control" /> 
+                <ValidationMessage For="() => Department.UpdatedAt" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/departments">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Department Department { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddDepartment()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Departments.Add(Department);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/departments");
+    }
+}

@@ -1,0 +1,114 @@
+﻿@page "/departments/edit"
+@using Microsoft.EntityFrameworkCore
+@using UserManagmentSystem.Models.Entities
+@inject IDbContextFactory<UserManagmentSystem.Data.AppDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Department</h2>
+<hr />
+@if (Department is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Department" OnValidSubmit="UpdateDepartment" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="Department.DepartmentId" value="@Department.DepartmentId" />
+                <div class="mb-3">
+                    <label for="departmentname" class="form-label">DepartmentName:</label>
+                    <InputText id="departmentname" @bind-Value="Department.DepartmentName" class="form-control" />
+                    <ValidationMessage For="() => Department.DepartmentName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="isactive" class="form-label">IsActive:</label>
+                    <InputCheckbox id="isactive" @bind-Value="Department.IsActive" class="form-check-input" />
+                    <ValidationMessage For="() => Department.IsActive" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdat" class="form-label">CreatedAt:</label>
+                    <InputDate id="createdat" @bind-Value="Department.CreatedAt" class="form-control" />
+                    <ValidationMessage For="() => Department.CreatedAt" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdbyadminid" class="form-label">CreatedByAdminId:</label>
+                    <InputNumber id="createdbyadminid" @bind-Value="Department.CreatedByAdminId" class="form-control" />
+                    <ValidationMessage For="() => Department.CreatedByAdminId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="lastmodifiedbyadminid" class="form-label">LastModifiedByAdminId:</label>
+                    <InputNumber id="lastmodifiedbyadminid" @bind-Value="Department.LastModifiedByAdminId" class="form-control" />
+                    <ValidationMessage For="() => Department.LastModifiedByAdminId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="updatedat" class="form-label">UpdatedAt:</label>
+                    <InputDate id="updatedat" @bind-Value="Department.UpdatedAt" class="form-control" />
+                    <ValidationMessage For="() => Department.UpdatedAt" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/departments">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int DepartmentId { get; set; }
+
+    [SupplyParameterFromForm]
+    private Department? Department { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Department ??= await context.Departments.FirstOrDefaultAsync(m => m.DepartmentId == DepartmentId);
+
+        if (Department is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateDepartment()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Department!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!DepartmentExists(Department!.DepartmentId))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/departments");
+    }
+
+    private bool DepartmentExists(int departmentid)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Departments.Any(e => e.DepartmentId == departmentid);
+    }
+}

@@ -1,0 +1,56 @@
+﻿@page "/departments/details"
+@using Microsoft.EntityFrameworkCore
+@using UserManagmentSystem.Models.Entities
+@inject IDbContextFactory<UserManagmentSystem.Data.AppDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Department</h2>
+    <hr />
+    @if (department is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">DepartmentName</dt>
+            <dd class="col-sm-10">@department.DepartmentName</dd>
+            <dt class="col-sm-2">IsActive</dt>
+            <dd class="col-sm-10">@department.IsActive</dd>
+            <dt class="col-sm-2">CreatedAt</dt>
+            <dd class="col-sm-10">@department.CreatedAt</dd>
+            <dt class="col-sm-2">CreatedByAdminId</dt>
+            <dd class="col-sm-10">@department.CreatedByAdminId</dd>
+            <dt class="col-sm-2">LastModifiedByAdminId</dt>
+            <dd class="col-sm-10">@department.LastModifiedByAdminId</dd>
+            <dt class="col-sm-2">UpdatedAt</dt>
+            <dd class="col-sm-10">@department.UpdatedAt</dd>
+        </dl>
+        <div>
+            <a href="@($"/departments/edit?departmentid={department.DepartmentId}")">Edit</a> |
+            <a href="@($"/departments")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Department? department;
+
+    [SupplyParameterFromQuery]
+    private int DepartmentId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        department = await context.Departments.FirstOrDefaultAsync(m => m.DepartmentId == DepartmentId);
+
+        if (department is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

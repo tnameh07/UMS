@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\UserManagmentSystem.bundle.scp.css",
+      "PackagePath": "staticwebassets\\UserManagmentSystem.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.UserManagmentSystem.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.UserManagmentSystem.props",
+      "PackagePath": "build\\UserManagmentSystem.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.UserManagmentSystem.props",
+      "PackagePath": "buildMultiTargeting\\UserManagmentSystem.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.UserManagmentSystem.props",
+      "PackagePath": "buildTransitive\\UserManagmentSystem.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,0 +1,102 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|c:\\users\\lenovo\\onedrive\\desktop\\new folder (2)\\ums-part3\\projectpart4\\usermanagmentsystem\\components\\pages\\employee\\dashboard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|solutionrelative:components\\pages\\employee\\dashboard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|c:\\users\\lenovo\\onedrive\\desktop\\new folder (2)\\ums-part3\\projectpart4\\usermanagmentsystem\\components\\pages\\employee\\employeepage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|solutionrelative:components\\pages\\employee\\employeepage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|c:\\users\\lenovo\\onedrive\\desktop\\new folder (2)\\ums-part3\\projectpart4\\usermanagmentsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|c:\\users\\lenovo\\onedrive\\desktop\\new folder (2)\\ums-part3\\projectpart4\\usermanagmentsystem\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|solutionrelative:components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|c:\\users\\lenovo\\onedrive\\desktop\\new folder (2)\\ums-part3\\projectpart4\\usermanagmentsystem\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2DD538E1-D2D4-4DC3-BF8D-C33FD7C38E71}|UserManagmentSystem.csproj|solutionrelative:components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Dashboard.razor",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\Pages\\Employee\\Dashboard.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Employee\\Dashboard.razor",
+              "ToolTip": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\Pages\\Employee\\Dashboard.razor",
+              "RelativeToolTip": "Components\\Pages\\Employee\\Dashboard.razor",
+              "ViewState": "AgIAAHABAAAAAAAAAAAiwJIBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-22T18:46:40.286Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-22T06:48:42.419Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Components\\App.razor",
+              "ToolTip": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\App.razor",
+              "RelativeToolTip": "Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-22T06:39:44.105Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_Imports.razor",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\_Imports.razor",
+              "RelativeDocumentMoniker": "Components\\_Imports.razor",
+              "ToolTip": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\_Imports.razor",
+              "RelativeToolTip": "Components\\_Imports.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-22T06:38:31.975Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Employeepage.razor",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\Pages\\Employee\\Employeepage.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Employee\\Employeepage.razor",
+              "ToolTip": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\New folder (2)\\UMS-part3\\projectpart4\\UserManagmentSystem\\Components\\Pages\\Employee\\Employeepage.razor",
+              "RelativeToolTip": "Components\\Pages\\Employee\\Employeepage.razor",
+              "ViewState": "AgIAAPwAAAAAAAAAAAAAAB0BAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-20T09:36:53.777Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

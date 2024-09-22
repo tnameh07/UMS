@@ -1,0 +1,100 @@
+﻿@page "/login"
+
+@using BCrypt.Net
+@using UserManagmentSystem.Models.ViewModel
+@using System.Security.Claims
+@using UserManagmentSystem.Data
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.EntityFrameworkCore;
+
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject AppDbContext appDbContext
+@inject NavigationManager navigationManager
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <EditForm Model="@Model" OnValidSubmit="Authenticate" FormName="LoginForm">
+            <DataAnnotationsValidator />
+            <div class="mb-3 text-center flex-column">
+                <img src="/image/avtar.png" style="max-height: 5rem;" />
+                <h3>LOGIN</h3>
+            </div>
+            <div class="mb-3">
+                <label>UserId or Email</label>
+                <InputText @bind-Value="Model.UserName" class="form-control" placeholder="Email" />
+                <ValidationMessage For="() => Model.UserName" />
+            </div>
+            <div class="mb-3">
+                <label>Password</label>
+                <InputText @bind-Value="Model.Password" class="form-control" placeholder="UserName" type="password" />
+                <ValidationMessage For="() => Model.Password" />
+            </div>
+
+            <div class="mb-3 text-center">
+                <span class="text-danger">
+                    @errorMessage
+                </span>
+            </div>
+            <div class="mb-3 d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                    Login
+                </button>
+            </div>
+
+
+        </EditForm>
+
+            
+    </div>
+
+</div>
+
+
+@code {
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    public LoginViewModel Model { get; set; } = new();
+
+    private string? errorMessage;
+
+    private async Task Authenticate()
+    {
+        var userAccount = await appDbContext.Employees
+            .Include(e => e.Role)
+            .FirstOrDefaultAsync(x => x.Email == Model.UserName);
+
+        if (userAccount is null)
+        {
+            errorMessage = "Invalid username or password.";
+            return;
+        }
+
+        // Verify the password using BCrypt
+        // Verify the password using BCrypt
+        if (!BCrypt.Verify(Model.Password, userAccount.PasswordHash))
+        {
+            errorMessage = "Invalid username or password.";
+            return;
+        }
+
+        var roleName = userAccount.Role?.RoleName ?? "No Role";
+        Console.WriteLine($"User role: {roleName}"); // Debug line
+
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, userAccount.FirstName + " " + userAccount.LastName),
+            new Claim(ClaimTypes.Email, userAccount.Email),
+            new Claim(ClaimTypes.Role, roleName),
+            new Claim(ClaimTypes.NameIdentifier, userAccount.EmployeeId.ToString())
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var principal = new ClaimsPrincipal(identity);
+
+        await HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+        navigationManager.NavigateTo("/");
+    }
+}

@@ -1,0 +1,464 @@
+﻿@page "/employee"
+@rendermode InteractiveServer
+
+@using Telerik.DataSource;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@using UserManagmentSystem.Models.ViewModel
+@using UserManagmentSystem.Models.Entities
+@using UserManagmentSystem.Service
+@using UserManagmentSystem.Data
+@using System.Security.Claims
+@using System.IO
+@inject IJSRuntime JSRuntime
+@inject EmployeeService EmployeeService
+@inject DepartmentService DepartmentService
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<TelerikContainer>
+    <h3>Employee Dashboard</h3>
+
+    @if (employees != null)
+    {
+        <DemoConfigurator>
+            <DemoConfiguratorColumn Description="Select columns for export">
+                <TelerikMultiSelect @bind-Value="@ExportColumns" Data="@Columns">
+                    <MultiSelectSettings>
+                        <MultiSelectPopupSettings Height="auto"></MultiSelectPopupSettings>
+                    </MultiSelectSettings>
+                </TelerikMultiSelect>
+            </DemoConfiguratorColumn>
+            <DemoConfiguratorColumn Description="Export">
+                <TelerikCheckBox Id="cancel-export" @bind-Value="@CancelExport"></TelerikCheckBox>
+                <label for="cancel-export">Cancel Export</label>
+            </DemoConfiguratorColumn>
+        </DemoConfigurator>
+
+        <TelerikGrid Data="@employees"
+                     Pageable="true"
+                     Sortable="true"
+                     FilterMode="GridFilterMode.FilterMenu"
+                     Resizable="true"
+                     Reorderable="true"
+                     EditMode="GridEditMode.Popup"
+                     OnUpdate="@UpdateHandler"
+                     OnDelete="@DeleteHandler"
+                     OnCreate="@CreateHandler"
+                     OnStateInit="@((GridStateEventArgs<Employee> args) => OnStateInit(args))"
+                     PageSize="20"
+                     Groupable="true"
+                     SelectionMode="GridSelectionMode.Multiple"
+                     Navigable="true"
+                     ConfirmDelete="true">
+            <GridToolBarTemplate>
+                <GridCommandButton Command="Add" Icon="@SvgIcon.Plus" OnClick="@OpenAddEmployeeModal">Add Employee</GridCommandButton>
+                <GridCommandButton Command="ExcelExport" Icon="@SvgIcon.FileExcel">Export to Excel</GridCommandButton>
+                <label class="k-checkbox-label"><TelerikCheckBox @bind-Value="@ExportAllPages" /> Export All Pages</label>
+          @{
+                @* <TelerikUpload OnSelect="@OnSelectHandler"
+               AllowedExtensions="@(new List<string>() { ".xlsx" })"
+               MaxFileSize="10485760"
+               AutoUpload="false">
+    <HeaderTemplate>
+        <GridCommandButton Icon="@SvgIcon.Upload">Upload Excel</GridCommandButton>
+    </HeaderTemplate>
+</TelerikUpload> *@
+          }
+            </GridToolBarTemplate>
+            <GridExport>
+                <GridExcelExport FileName="employees-export" AllPages="@ExportAllPages" OnBeforeExport="@OnBeforeExcelExport" />
+            </GridExport>
+            <GridColumns>
+                <GridCheckboxColumn></GridCheckboxColumn>
+                <GridColumn Field="@nameof(Employee.EmployeeId)" Title="ID" Width="70px" Editable="false" />
+                <GridColumn Field="@nameof(Employee.FirstName)" Title="First Name" Width="120px" />
+                <GridColumn Field="@nameof(Employee.Email)" Title="Email" Width="200px" />
+                <GridColumn Field="@nameof(Employee.MobileNumber)" Title="Mobile" Width="120px" />
+                <GridColumn Field="@nameof(Employee.DepartmentId)" Title="Department" Width="120px">
+                    <Template>
+                        @{
+                            var employee = context as Employee;
+                            var departmentName = departments.FirstOrDefault(d => d.DepartmentId == employee.DepartmentId)?.DepartmentName;
+                            @departmentName
+                        }
+                    </Template>
+                    <EditorTemplate>
+                        @{
+                            var employee = context as Employee;
+                            <TelerikDropDownList Data="@departments"
+                                                 @bind-Value="@employee.DepartmentId"
+                                                 TextField="DepartmentName"
+                                                 ValueField="DepartmentId">
+                            </TelerikDropDownList>
+                        }
+                    </EditorTemplate>
+                    <FilterMenuTemplate>
+                        @{
+                            <TelerikComboBox Data="@departments"
+                                             @bind-Value="@DepartmentFilterValue"
+                                             OnChange="@DepartmentFilterChange"
+                                             TextField="DepartmentName"
+                                             ValueField="DepartmentId"
+                                             Placeholder="Select Department">
+                            </TelerikComboBox>
+                        }
+                    </FilterMenuTemplate>
+                </GridColumn>
+                <GridColumn Field="@nameof(Employee.RoleId)" Title="Role" Width="120px">
+                    <Template>
+                        @{
+                            var employee = context as Employee;
+                            var roleName = roles.FirstOrDefault(r => r.RoleId == employee.RoleId)?.RoleName;
+                            @roleName
+                        }
+                    </Template>
+                    <EditorTemplate>
+                        @{
+                            var employee = context as Employee;
+                            <TelerikDropDownList Data="@roles"
+                                                 @bind-Value="@employee.RoleId"
+                                                 TextField="RoleName"
+                                                 ValueField="RoleId">
+                            </TelerikDropDownList>
+                        }
+                    </EditorTemplate>
+                    <FilterMenuTemplate>
+                        @{
+                            <TelerikComboBox Data="@roles"
+                                             @bind-Value="@RoleFilterValue"
+                                             OnChange="@RoleFilterChange"
+                                             TextField="RoleName"
+                                             ValueField="RoleId"
+                                             Placeholder="Select Role">
+                            </TelerikComboBox>
+                        }
+                    </FilterMenuTemplate>
+                </GridColumn>
+                <GridColumn Field="@nameof(Employee.UserType)" Title="User Type" Width="120px">
+                    <FilterMenuTemplate>
+                        @{
+                            <TelerikComboBox Data="@UserTypes"
+                                             @bind-Value="@UserTypeFilterValue"
+                                             OnChange="@UserTypeFilterChange"
+                                             Placeholder="Select User Type">
+                            </TelerikComboBox>
+                        }
+                    </FilterMenuTemplate>
+                </GridColumn>
+                <GridColumn Field="@nameof(Employee.IsActive)" Title="Active" Width="80px">
+                    <Template>
+                        @{
+                            var employee = context as Employee;
+                            if (employee.IsActive)
+                            {
+                                <span class="k-badge k-badge-md k-badge-solid k-badge-solid-success k-rounded-md">Active</span>
+                            }
+                            else
+                            {
+                                <span class="k-badge k-badge-md k-badge-solid k-badge-solid-error k-rounded-md">Inactive</span>
+                            }
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn Field="@nameof(Employee.StreetAddress)" Title="Address" Width="200px" />
+                <GridColumn Field="@nameof(Employee.City)" Title="City" Width="120px" />
+                <GridColumn Field="@nameof(Employee.State)" Title="State" Width="120px" />
+                <GridColumn Field="@nameof(Employee.PostalCode)" Title="Postal Code" Width="100px" />
+                <GridColumn Field="@nameof(Employee.Country)" Title="Country" Width="120px" />
+                <GridColumn Field="@nameof(Employee.CreatedAt)" Title="Created At" Width="150px" />
+                <GridColumn Field="@nameof(Employee.UpdatedAt)" Title="Updated At" Width="150px" />
+                <GridCommandColumn Width="220px">
+                    <GridCommandButton Command="Edit" Icon="@SvgIcon.Pencil" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Edit</GridCommandButton>
+                    <GridCommandButton Command="Delete" Icon="@SvgIcon.Trash">Delete</GridCommandButton>
+                </GridCommandColumn>
+            </GridColumns>
+        </TelerikGrid>
+
+        <TelerikWindow @bind-Visible="@IsAddEmployeeModalVisible" Width="500px" Height="600px" Modal="true" Centered="true">
+            <WindowTitle>Add New Employee</WindowTitle>
+            <WindowContent>
+                <TelerikForm Model="@newEmployee" OnValidSubmit="@HandleAddEmployeeValidSubmit">
+                    <FormItems>
+                        <FormItem Field="@nameof(EmployeeViewModel.FirstName)" />
+                        <FormItem Field="@nameof(EmployeeViewModel.LastName)" />
+                        <FormItem Field="@nameof(EmployeeViewModel.Email)" />
+                        <FormItem Field="@nameof(EmployeeViewModel.MobileNumber)" />
+                        <FormItem Field="@nameof(EmployeeViewModel.DepartmentId)">
+                            <Template>
+                                <TelerikDropDownList Data="@departments"
+                                                     @bind-Value="@newEmployee.DepartmentId"
+                                                     TextField="DepartmentName"
+                                                     ValueField="DepartmentId"
+                                                     DefaultText="Select Department">
+                                </TelerikDropDownList>
+                            </Template>
+                        </FormItem>
+                        <FormItem Field="@nameof(EmployeeViewModel.RoleId)">
+                            <Template>
+                                <TelerikDropDownList Data="@roles"
+                                                     @bind-Value="@newEmployee.RoleId"
+                                                     TextField="RoleName"
+                                                     ValueField="RoleId"
+                                                     DefaultText="Select Role">
+                                </TelerikDropDownList>
+                            </Template>
+                        </FormItem>
+                        <FormItem Field="@nameof(EmployeeViewModel.UserType)">
+                            <Template>
+                                <TelerikDropDownList Data="@UserTypes"
+                                                     @bind-Value="@newEmployee.UserType"
+                                                     DefaultText="Select User Type">
+                                </TelerikDropDownList>
+                            </Template>
+                        </FormItem>
+                        <FormItem Field="@nameof(EmployeeViewModel.IsActive)" />
+                    </FormItems>
+                    <FormButtons>
+                        <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="primary">Add Employee</TelerikButton>
+                        <TelerikButton OnClick="@CloseAddEmployeeModal">Cancel</TelerikButton>
+                    </FormButtons>
+                </TelerikForm>
+            </WindowContent>
+        </TelerikWindow>
+    }
+    else
+    {
+        <div class="loader-container">
+            <TelerikLoaderContainer OverlayThemeColor="light"
+                                    Visible="@(!IsInitialDataLoadComplete)"
+                                    Text="@null" Class="initial-data-loader">
+                <Template>
+                    <TelerikLoader Type="@LoaderType.InfiniteSpinner"
+                                   Size="@(ThemeConstants.Loader.Size.Large)">
+                    </TelerikLoader>
+                </Template>
+            </TelerikLoaderContainer>
+        </div>
+    }
+</TelerikContainer>
+
+@code {
+    private List<Employee> employees;
+    private List<Department> departments;
+    private List<Role> roles;
+    private List<string> UserTypes = new List<string> { "Employee", "Manager", "Admin" };
+    private bool IsInitialDataLoadComplete { get; set; }
+    private bool ExportAllPages { get; set; }
+    private bool CancelExport { get; set; }
+    private List<string> ExportColumns { get; set; } = new List<string>();
+    private List<string> Columns { get; set; }
+    private int? DepartmentFilterValue { get; set; }
+    private int? RoleFilterValue { get; set; }
+    private string UserTypeFilterValue { get; set; }
+    private bool IsAddEmployeeModalVisible { get; set; }
+    private EmployeeViewModel newEmployee = new EmployeeViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (employees == null && !IsInitialDataLoadComplete)
+        {
+            await Task.Delay(500);
+            await LoadEmployees();
+            await LoadDepartments();
+            await LoadRoles();
+            IsInitialDataLoadComplete = true;
+            InitializeColumns();
+        }
+    }
+ 
+
+    private void InitializeColumns()
+    {
+        Columns = typeof(Employee).GetProperties().Select(p => p.Name).ToList();
+    }
+
+    private async Task LoadEmployees()
+    {
+        using var context = await DbFactory.CreateDbContextAsync();
+        employees = await context.Employees
+            .Include(e => e.Department)
+            .Include(e => e.Role)
+            .ToListAsync();
+    }
+
+    private async Task LoadDepartments()
+    {
+        departments = await DepartmentService.GetDepartmentsAsync();
+    }
+
+    private async Task LoadRoles()
+    {
+        using var context = await DbFactory.CreateDbContextAsync();
+        roles = await context.Roles.ToListAsync();
+    }
+
+    private async Task UpdateHandler(GridCommandEventArgs args)
+    {
+        var employee = (Employee)args.Item;
+        await EmployeeService.UpdateEmployeeAsync(employee.EmployeeId, MapToViewModel(employee), GetCurrentAdminId());
+        await LoadEmployees();
+    }
+
+    private async Task DeleteHandler(GridCommandEventArgs args)
+    {
+        var employee = (Employee)args.Item;
+        await EmployeeService.DeleteEmployeeAsync(employee.EmployeeId);
+        await LoadEmployees();
+    }
+
+    private async Task CreateHandler(GridCommandEventArgs args)
+    {
+        var employee = (Employee)args.Item;
+        await EmployeeService.CreateEmployeeAsync(MapToViewModel(employee), GetCurrentAdminId());
+        await LoadEmployees();
+    }
+
+    private void OnStateInit(GridStateEventArgs<Employee> args)
+    {
+        args.GridState.GroupDescriptors = new List<GroupDescriptor>()
+        {
+            new GroupDescriptor()
+            {
+                Member = nameof(Employee.DepartmentId),
+                MemberType = typeof(int)
+            }
+        };
+    }
+
+    private EmployeeViewModel MapToViewModel(Employee employee)
+    {
+        return new EmployeeViewModel
+            {
+                EmployeeId = employee.EmployeeId,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                UserType = employee.UserType,
+                MobileNumber = employee.MobileNumber,
+                DepartmentId = employee.DepartmentId,
+                RoleId = employee.RoleId,
+                IsActive = employee.IsActive,
+                StreetAddress = employee.StreetAddress,
+                City = employee.City,
+                State = employee.State,
+                PostalCode = employee.PostalCode,
+                Country = employee.Country
+            };
+    }
+
+    private int GetCurrentAdminId()
+    {
+        // Implement logic to get the current admin's ID
+        // This is a placeholder and should be replaced with actual authentication logic
+        return 1;
+    }
+
+    private async Task OnBeforeExcelExport(GridBeforeExcelExportEventArgs args)
+    {
+        if (CancelExport)
+        {
+            args.IsCancelled = true;
+            return;
+        }
+
+       // args.ColumnList = ExportColumns.Select(col => new GridColumnExcelExportField(col)).ToList();
+    }
+
+    private void DepartmentFilterChange(object value)
+    {
+        DepartmentFilterValue = (int?)value;
+        // Implement filtering logic here
+    }
+
+    private void RoleFilterChange(object value)
+    {
+        RoleFilterValue = (int?)value;
+        // Implement filtering logic here
+    }
+
+    private void UserTypeFilterChange(object value)
+    {
+        UserTypeFilterValue = (string)value;
+        // Implement filtering logic here
+    }
+
+    private void OpenAddEmployeeModal()
+    {
+        newEmployee = new EmployeeViewModel();
+        IsAddEmployeeModalVisible = true;
+    }
+
+    private void CloseAddEmployeeModal()
+    {
+        IsAddEmployeeModalVisible = false;
+    }
+
+    private async Task HandleAddEmployeeValidSubmit()
+    {
+        // await EmployeeService.CreateEmployeeAsync(newEmployee, GetCurrentAdminId());
+        // await LoadEmployees();
+        // CloseAddEmployeeModal();
+        try
+        {
+            await EmployeeService.CreateEmployeeAsync(newEmployee, GetCurrentAdminId());
+            await LoadEmployees(); // Reload employees to refresh the grid
+            CloseAddEmployeeModal(); // Close modal after successful addition
+        }
+        catch (Exception ex)
+        {
+            // Handle the exception, you could log it or display an error message
+            Console.WriteLine(ex.Message);
+            await JSRuntime.InvokeVoidAsync("alert", "Failed to add employee. Please check the details.");
+        }
+    }
+    private async Task OnSelectHandler(FileSelectEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+            if (file.Extension.ToLower() == ".xlsx")
+            {
+                await ProcessExcelFile(file);
+            }
+            else
+            {
+                // Handle invalid file type
+                Console.WriteLine($"Invalid file type: {file.Name}");
+                // You might want to display an error message to the user here
+            }
+        }
+    }
+
+    private async Task ProcessExcelFile(FileSelectFileInfo file)
+    {
+        try
+        {
+            // Here you would typically use a library like EPPlus, ClosedXML, or NPOI to read the Excel file
+            // For this example, we'll just simulate processing the file
+            await SimulateExcelProcessing(file);
+
+            // After processing, reload the employees
+            await LoadEmployees();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error processing file: {ex.Message}");
+            // You might want to display an error message to the user here
+        }
+    }
+
+    private async Task SimulateExcelProcessing(FileSelectFileInfo file)
+    {
+        // This is a placeholder method to simulate processing an Excel file
+        // In a real implementation, you would parse the Excel file and add new employees to your database
+        await Task.Delay(2000); // Simulate processing time
+        Console.WriteLine($"Excel file '{file.Name}' processed successfully");
+        // You might want to display a success message to the user here
+    }
+    private async Task OnSuccessHandler(UploadSuccessEventArgs args)
+    {
+        // Implement logic to handle successful Excel file upload
+        // This might involve parsing the Excel file and adding new employees
+        await LoadEmployees();
+    }
+}

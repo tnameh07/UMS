@@ -1,0 +1,36 @@
+﻿@page "/roles"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using UserManagmentSystem.Models.Entities
+@using UserManagmentSystem.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<UserManagmentSystem.Data.AppDbContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="roles/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Roles">
+    <PropertyColumn Property="role => role.RoleName" />
+
+    <TemplateColumn Context="role">
+        <a href="@($"roles/edit?roleid={role.RoleId}")">Edit</a> |
+        <a href="@($"roles/details?roleid={role.RoleId}")">Details</a> |
+        <a href="@($"roles/delete?roleid={role.RoleId}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private AppDbContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

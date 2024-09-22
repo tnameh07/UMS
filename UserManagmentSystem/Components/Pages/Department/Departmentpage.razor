@@ -1,0 +1,154 @@
+﻿@page "/departments"
+@rendermode InteractiveServer
+
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@using UserManagmentSystem.Models.Entities
+@using UserManagmentSystem.Models.ViewModel
+@using UserManagmentSystem.Service
+@using System.Security.Claims
+@inject IDbContextFactory<UserManagmentSystem.Data.AppDbContext> DbFactory
+@attribute [Authorize(Roles = "System Admin,Employee,Administrator,User")]
+@inject DepartmentService DepartmentService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>Departments</h3>
+
+<div class="row mb-3">
+    <div class="col">
+        <button class="btn btn-primary" @onclick="() => OpenModal()">Add Department</button>
+    </div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Created By </th>
+            <th>Created date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var department in departments)
+        {
+            <tr>
+
+                <td>@department.DepartmentId</td>
+                <td>@department.DepartmentName</td>
+                <td>@(department.IsActive ? "Active" : "Inactive")</td>
+                <td>@department.CreatedByAdminId</td>
+                <td>@department.CreatedAt</td>
+                <td>
+                    <button class="btn btn-sm btn-info" @onclick="() => OpenModal(department)">Edit</button>
+                    <button class="btn btn-sm btn-danger" @onclick="() => DeleteDepartment(department.DepartmentId)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (showModal)
+{ //
+
+    <div class="modal fade show" style="display: block;" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(editingDepartment.DepartmentId == 0 ? "Add" : "Edit") Department</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@editingDepartment" OnValidSubmit="SaveDepartment">
+                        <DataAnnotationsValidator />
+                        <div class="mb-3">
+                            <label for="departmentName" class="form-label">Department Name</label>
+                            <InputText id="departmentName" class="form-control" @bind-Value="editingDepartment.DepartmentName" />
+                            <ValidationMessage For="@(() => editingDepartment.DepartmentName)" />
+                        </div>
+                        <div class="mb-3 form-check">
+                            <InputCheckbox id="isActive" class="form-check-input" @bind-Value="editingDepartment.IsActive" />
+                            <label class="form-check-label" for="isActive">Is Active</label>
+                            <ValidationMessage For="@(() => editingDepartment.IsActive)" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private List<Department>? departments = new();
+    private DepartmentViewModel editingDepartment = new();
+    private bool showModal = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        await LoadDepartments();
+    }
+
+    private async Task LoadDepartments()
+    {
+        departments = await DepartmentService.GetDepartmentsAsync();
+    }
+
+    private void OpenModal(Department? department = null)
+    {
+        if (department == null)
+        {
+            editingDepartment = new DepartmentViewModel
+                {
+                    DepartmentId = 0  // Ensure it's 0 for new departments
+                };
+        }
+        else
+        {
+            editingDepartment = new DepartmentViewModel
+                {
+                    DepartmentId = department.DepartmentId,  // Preserve the DepartmentId
+                    DepartmentName = department.DepartmentName,
+                    IsActive = department.IsActive
+                };
+        }
+        showModal = true;
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
+    private async Task SaveDepartment()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        Console.WriteLine(authState+ "  : "+ user);
+        var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+        if (editingDepartment.DepartmentId == 0)
+        {
+            await DepartmentService.CreateDepartmentAsync(editingDepartment, userId);
+        }
+        else
+        {
+            await DepartmentService.UpdateDepartmentAsync(editingDepartment.DepartmentId, editingDepartment, userId);
+        }
+
+        await LoadDepartments();
+        CloseModal();
+
+        
+    }
+
+    private async Task DeleteDepartment(int id)
+    {
+        await DepartmentService.DeleteDepartmentAsync(id);
+        await LoadDepartments();
+    }
+}

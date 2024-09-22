@@ -1,0 +1,127 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = UserManagmentSystem
+build_property.RootNamespace = UserManagmentSystem
+build_property.ProjectDir = C:\Users\Lenovo\OneDrive\Desktop\New folder (2)\UMS-part3\projectpart4\UserManagmentSystem\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Lenovo\OneDrive\Desktop\New folder (2)\UMS-part3\projectpart4\UserManagmentSystem
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Account/AccessDenied.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50XEFjY2Vzc0RlbmllZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Account/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50XExvZ2luLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Account/Logout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50XExvZ291dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Account/UserInfo.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50XFVzZXJJbmZvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Department/Departmentpage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEZXBhcnRtZW50XERlcGFydG1lbnRwYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Employee/Dashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFbXBsb3llZVxEYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Employee/Employeedashbord.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFbXBsb3llZVxFbXBsb3llZWRhc2hib3JkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Employee/Employeepage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFbXBsb3llZVxFbXBsb3llZXBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Employee/GridCoulums.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFbXBsb3llZVxHcmlkQ291bHVtcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Employee/Overview.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFbXBsb3llZVxPdmVydmlldy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/RolePages/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSb2xlUGFnZXNcQ3JlYXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/RolePages/Delete.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSb2xlUGFnZXNcRGVsZXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/RolePages/Details.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSb2xlUGFnZXNcRGV0YWlscy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/RolePages/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSb2xlUGFnZXNcRWRpdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/RolePages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSb2xlUGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Pages/Weather.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/TelerikContainer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUZWxlcmlrQ29udGFpbmVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-bactk0yhlf
+
+[C:/Users/Lenovo/OneDrive/Desktop/New folder (2)/UMS-part3/projectpart4/UserManagmentSystem/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-4w3ziy70ee
